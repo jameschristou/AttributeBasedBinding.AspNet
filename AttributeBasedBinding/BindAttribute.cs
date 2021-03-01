@@ -30,6 +30,11 @@ namespace AttributeBasedBinding
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public class BindAttribute : Attribute
     {
+        public BindAttribute()
+        {
+            BindingType = BindingType.Transient;
+        }
+
         public BindAttribute(BindingType bindingType)
         {
             BindingType = bindingType;
@@ -41,6 +46,8 @@ namespace AttributeBasedBinding
     public enum BindingType
     {
         Transient,
-        Singleton
+        SelfAsTransient,
+        Singleton,
+        SelfAsSingleton,
     }
 }

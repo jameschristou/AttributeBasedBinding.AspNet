@@ -9,6 +9,13 @@ namespace AttributeBasedBinding.AspNetNinject.Controllers
 {
     public class ValuesController : ApiController
     {
+        private readonly IMessageProvider _messageProvider;
+
+        public ValuesController(IMessageProvider messageProvider)
+        {
+            _messageProvider = messageProvider;
+        }
+
         // GET api/values
         public IEnumerable<string> Get()
         {
@@ -18,7 +25,7 @@ namespace AttributeBasedBinding.AspNetNinject.Controllers
         // GET api/values/5
         public string Get(int id)
         {
-            return "value";
+            return _messageProvider.GetMsg();
         }
 
         // POST api/values
@@ -34,6 +41,20 @@ namespace AttributeBasedBinding.AspNetNinject.Controllers
         // DELETE api/values/5
         public void Delete(int id)
         {
+        }
+    }
+
+    public interface IMessageProvider
+    {
+        string GetMsg();
+    }
+
+    [Bind]
+    public class MessageProvider : IMessageProvider
+    {
+        public string GetMsg()
+        {
+            return "This worked!";
         }
     }
 }

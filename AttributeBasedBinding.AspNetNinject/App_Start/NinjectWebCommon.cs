@@ -68,32 +68,47 @@ namespace AttributeBasedBinding.AspNetNinject.App_Start
         {
             // only scan our assemblies and not 3rd party assemblies or external assemblies
             var assembliesToScan = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a => a.FullName.StartsWith("AttributesBasedBinding.")).ToArray();
+                .Where(a => a.FullName.StartsWith("AttributeBasedBinding.")).ToArray();
 
-            //foreach (var assembly in assembliesToScan)
-            //{
-            //    var typesToBind = assembly.GetTypes().Where(t => t.CustomAttributes.Any(x => x.AttributeType == typeof(BindAttribute)));
+            // implementing interface and transient scope (this is also the default case)
+            kernel.Bind(x => x.From(assembliesToScan)
+                                .SelectAllClasses()
+                                .Where(t =>
+                                {
+                                    var bindingAttribute = t.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(BindAttribute));
 
-            //    foreach (var typeToBind in typesToBind)
-            //    {
-            //        // get the bind attribute
-            //        var bindAttribute = typeToBind.CustomAttributes.First(x => x.AttributeType == typeof(BindAttribute));
+                                    if (bindingAttribute == null) return false;
 
-            //        var bindingType = ((BindAttribute)bindAttribute.ConstructorArguments.First().Value).BindingType;
+                                    var firstConstructorArgument = bindingAttribute.ConstructorArguments.FirstOrDefault();
 
-            //        switch (bindingType)
-            //        {
-            //            case BindingType.Singleton:
+                                    // when type of binding not specified, defaults to transient
+                                    if (firstConstructorArgument == null || firstConstructorArgument.Value == null) return true;
 
-            //        }
-            //    }
-            //}
+                                    if (((BindAttribute)firstConstructorArgument.Value).BindingType != BindingType.Transient) return false;
 
+                                    return true;
+                                })
+                                .BindSingleInterface());
+
+            // self binding transient scope
+            kernel.Bind(x => x.From(assembliesToScan)
+                                .SelectAllClasses()
+                                .Where(t =>
+                                {
+                                    var bindingAttribute = t.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(BindAttribute));
+
+                                    if (bindingAttribute == null) return false;
+
+                                    if (((BindAttribute)bindingAttribute.ConstructorArguments.First().Value).BindingType != BindingType.SelfAsTransient) return false;
+
+                                    return true;
+                                })
+                                .BindToSelf());
 
             // implementing interface and singleton scope
             kernel.Bind(x => x.From(assembliesToScan)
                                 .SelectAllClasses()
-                                .Where(t => 
+                                .Where(t =>
                                 {
                                     var bindingAttribute = t.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(BindAttribute));
 
@@ -104,6 +119,22 @@ namespace AttributeBasedBinding.AspNetNinject.App_Start
                                     return true;
                                 })
                                 .BindSingleInterface()
+                                .Configure(b => b.InSingletonScope()));
+
+            // self binding and singleton scope
+            kernel.Bind(x => x.From(assembliesToScan)
+                                .SelectAllClasses()
+                                .Where(t =>
+                                {
+                                    var bindingAttribute = t.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(BindAttribute));
+
+                                    if (bindingAttribute == null) return false;
+
+                                    if (((BindAttribute)bindingAttribute.ConstructorArguments.First().Value).BindingType != BindingType.SelfAsSingleton) return false;
+
+                                    return true;
+                                })
+                                .BindToSelf()
                                 .Configure(b => b.InSingletonScope()));
         }
     }
