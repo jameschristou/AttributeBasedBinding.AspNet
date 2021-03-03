@@ -10,16 +10,20 @@ namespace AttributeBasedBinding.AspNetNinject.Controllers
     public class ValuesController : ApiController
     {
         private readonly IMessageProvider _messageProvider;
+        private readonly IAlternativeMessageProvider _alternativeMessageProvider;
 
-        public ValuesController(IMessageProvider messageProvider)
+        public ValuesController(IMessageProvider messageProvider, IAlternativeMessageProvider alternativeMessageProvider)
         {
             _messageProvider = messageProvider;
+            _alternativeMessageProvider = alternativeMessageProvider;
         }
 
         // GET api/values
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            _alternativeMessageProvider.SetMsg(DateTime.Now.ToString());
+
+            return new string[] { _messageProvider.GetMsg(), _alternativeMessageProvider.GetMsg() };
         }
 
         // GET api/values/5
@@ -55,6 +59,28 @@ namespace AttributeBasedBinding.AspNetNinject.Controllers
         public string GetMsg()
         {
             return "This worked!";
+        }
+    }
+
+    public interface IAlternativeMessageProvider
+    {
+        string GetMsg();
+        void SetMsg(string msg);
+    }
+
+    [Bind(BindingType.Singleton)]
+    public class AlternativeMessageProvider : IAlternativeMessageProvider
+    {
+        private string _message = "Initial";
+
+        public string GetMsg()
+        {
+            return _message;
+        }
+
+        public void SetMsg(string msg)
+        {
+            _message = _message + msg;
         }
     }
 }

@@ -84,9 +84,9 @@ namespace AttributeBasedBinding.AspNetNinject.App_Start
                                     // when type of binding not specified, defaults to transient
                                     if (firstConstructorArgument == null || firstConstructorArgument.Value == null) return true;
 
-                                    if (((BindAttribute)firstConstructorArgument.Value).BindingType != BindingType.Transient) return false;
+                                    if (Enum.TryParse(firstConstructorArgument.Value.ToString(), out BindingType bindingType) && bindingType == BindingType.Transient) return true;
 
-                                    return true;
+                                    return false;
                                 })
                                 .BindSingleInterface());
 
@@ -99,9 +99,14 @@ namespace AttributeBasedBinding.AspNetNinject.App_Start
 
                                     if (bindingAttribute == null) return false;
 
-                                    if (((BindAttribute)bindingAttribute.ConstructorArguments.First().Value).BindingType != BindingType.SelfAsTransient) return false;
+                                    var firstConstructorArgument = bindingAttribute.ConstructorArguments.FirstOrDefault();
 
-                                    return true;
+                                    // when type of binding not specified, defaults to transient
+                                    if (firstConstructorArgument == null || firstConstructorArgument.Value == null) return false;
+
+                                    if (Enum.TryParse(firstConstructorArgument.Value.ToString(), out BindingType bindingType) && bindingType == BindingType.SelfAsTransient) return true;
+
+                                    return false;
                                 })
                                 .BindToSelf());
 
@@ -114,9 +119,14 @@ namespace AttributeBasedBinding.AspNetNinject.App_Start
 
                                     if (bindingAttribute == null) return false;
 
-                                    if (((BindAttribute)bindingAttribute.ConstructorArguments.First().Value).BindingType != BindingType.Singleton) return false;
+                                    var firstConstructorArgument = bindingAttribute.ConstructorArguments.FirstOrDefault();
 
-                                    return true;
+                                    // when type of binding not specified, defaults to transient
+                                    if (firstConstructorArgument == null || firstConstructorArgument.Value == null) return false;
+
+                                    if (Enum.TryParse(firstConstructorArgument.Value.ToString(), out BindingType bindingType) && bindingType == BindingType.Singleton) return true;
+
+                                    return false;
                                 })
                                 .BindSingleInterface()
                                 .Configure(b => b.InSingletonScope()));
@@ -130,9 +140,14 @@ namespace AttributeBasedBinding.AspNetNinject.App_Start
 
                                     if (bindingAttribute == null) return false;
 
-                                    if (((BindAttribute)bindingAttribute.ConstructorArguments.First().Value).BindingType != BindingType.SelfAsSingleton) return false;
+                                    var firstConstructorArgument = bindingAttribute.ConstructorArguments.FirstOrDefault();
 
-                                    return true;
+                                    // when type of binding not specified, defaults to transient
+                                    if (firstConstructorArgument == null || firstConstructorArgument.Value == null) return false;
+
+                                    if (Enum.TryParse(firstConstructorArgument.Value.ToString(), out BindingType bindingType) && bindingType == BindingType.SelfAsSingleton) return true;
+
+                                    return false;
                                 })
                                 .BindToSelf()
                                 .Configure(b => b.InSingletonScope()));
