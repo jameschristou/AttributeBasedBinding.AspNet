@@ -3,36 +3,11 @@
 namespace AttributeBasedBinding
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class AutoBindAttribute : Attribute
-    {
-    }
-
-    [AttributeUsage(AttributeTargets.Class)]
-    public class AutoBindSelfAttribute : Attribute
-    {
-    }
-
-    [AttributeUsage(AttributeTargets.Class)]
-    public class AutoBindSelfAsSingletonAttribute : Attribute
-    {
-    }
-
-    [AttributeUsage(AttributeTargets.Class)]
-    public class AutoBindAsPerRequestAttribute : Attribute
-    {
-    }
-
-    [AttributeUsage(AttributeTargets.Class)]
-    public class AutoBindAsSingletonAttribute : Attribute
-    {
-    }
-
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public class BindAttribute : Attribute
     {
         public BindAttribute()
         {
-            BindingType = BindingType.Transient;
+            BindingType = BindingType.AsTransient;
         }
 
         public BindAttribute(BindingType bindingType)
@@ -43,11 +18,26 @@ namespace AttributeBasedBinding
         public BindingType BindingType { get; set; }
     }
 
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public class BindToSelfAttribute : Attribute
+    {
+    }
+
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public class BindToSelfAsSingletonAttribute : Attribute
+    {
+    }
+
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public class BindAsSingletonAttribute : Attribute
+    {
+    }
+
     public enum BindingType
     {
-        Transient,
-        SelfAsTransient,
-        Singleton,
-        SelfAsSingleton,
+        AsTransient,
+        ToSelfAsTransient,
+        AsSingleton,
+        ToSelfAsSingleton,
     }
 }

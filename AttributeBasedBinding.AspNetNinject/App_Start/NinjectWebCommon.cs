@@ -70,85 +70,29 @@ namespace AttributeBasedBinding.AspNetNinject.App_Start
             var assembliesToScan = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(a => a.FullName.StartsWith("AttributeBasedBinding.")).ToArray();
 
-            // implementing interface and transient scope (this is also the default case)
+            // implementing interface and transient scope
             kernel.Bind(x => x.From(assembliesToScan)
                                 .SelectAllClasses()
-                                .Where(t =>
-                                {
-                                    var bindingAttribute = t.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(BindAttribute));
-
-                                    if (bindingAttribute == null) return false;
-
-                                    var firstConstructorArgument = bindingAttribute.ConstructorArguments.FirstOrDefault();
-
-                                    // when type of binding not specified, defaults to transient
-                                    if (firstConstructorArgument == null || firstConstructorArgument.Value == null) return true;
-
-                                    if (Enum.TryParse(firstConstructorArgument.Value.ToString(), out BindingType bindingType) && bindingType == BindingType.Transient) return true;
-
-                                    return false;
-                                })
+                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindAttribute)))
                                 .BindSingleInterface());
 
             // self binding transient scope
             kernel.Bind(x => x.From(assembliesToScan)
                                 .SelectAllClasses()
-                                .Where(t =>
-                                {
-                                    var bindingAttribute = t.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(BindAttribute));
-
-                                    if (bindingAttribute == null) return false;
-
-                                    var firstConstructorArgument = bindingAttribute.ConstructorArguments.FirstOrDefault();
-
-                                    // when type of binding not specified, defaults to transient
-                                    if (firstConstructorArgument == null || firstConstructorArgument.Value == null) return false;
-
-                                    if (Enum.TryParse(firstConstructorArgument.Value.ToString(), out BindingType bindingType) && bindingType == BindingType.SelfAsTransient) return true;
-
-                                    return false;
-                                })
+                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindToSelfAttribute)))
                                 .BindToSelf());
 
             // implementing interface and singleton scope
             kernel.Bind(x => x.From(assembliesToScan)
                                 .SelectAllClasses()
-                                .Where(t =>
-                                {
-                                    var bindingAttribute = t.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(BindAttribute));
-
-                                    if (bindingAttribute == null) return false;
-
-                                    var firstConstructorArgument = bindingAttribute.ConstructorArguments.FirstOrDefault();
-
-                                    // when type of binding not specified, defaults to transient
-                                    if (firstConstructorArgument == null || firstConstructorArgument.Value == null) return false;
-
-                                    if (Enum.TryParse(firstConstructorArgument.Value.ToString(), out BindingType bindingType) && bindingType == BindingType.Singleton) return true;
-
-                                    return false;
-                                })
+                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindAsSingletonAttribute)))
                                 .BindSingleInterface()
                                 .Configure(b => b.InSingletonScope()));
 
             // self binding and singleton scope
             kernel.Bind(x => x.From(assembliesToScan)
                                 .SelectAllClasses()
-                                .Where(t =>
-                                {
-                                    var bindingAttribute = t.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(BindAttribute));
-
-                                    if (bindingAttribute == null) return false;
-
-                                    var firstConstructorArgument = bindingAttribute.ConstructorArguments.FirstOrDefault();
-
-                                    // when type of binding not specified, defaults to transient
-                                    if (firstConstructorArgument == null || firstConstructorArgument.Value == null) return false;
-
-                                    if (Enum.TryParse(firstConstructorArgument.Value.ToString(), out BindingType bindingType) && bindingType == BindingType.SelfAsSingleton) return true;
-
-                                    return false;
-                                })
+                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindToSelfAsSingletonAttribute)))
                                 .BindToSelf()
                                 .Configure(b => b.InSingletonScope()));
         }
