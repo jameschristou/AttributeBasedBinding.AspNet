@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace AttributeBasedBinding.AspNetNinject
 {
@@ -19,6 +21,17 @@ namespace AttributeBasedBinding.AspNetNinject
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+
+            // This next commented out line was causing the problem
+            //var jsonFormatter = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+
+            // This next line was the solution
+            config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false; // defaults to false, but no harm done
+            config.Formatters.JsonFormatter.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+            config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.None;
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         }
     }
 }

@@ -29,44 +29,44 @@ namespace AttributeBasedBinding.AspNetNinject.Controllers
 
         [Route("transient")]
         [HttpGet]
-        public string GetTransient()
+        public IHttpActionResult GetTransient()
         {
-            return _transientMessageProvider.GetMsg();
+            return Ok(new { msg = _transientMessageProvider.GetMsg() });
         }
 
         [Route("singleton")]
         [HttpGet]
-        public string GetSingleton()
+        public IHttpActionResult GetSingleton()
         {
-            return _singletonMessageProvider.GetMsg();
+            return Ok(new { msg = _singletonMessageProvider.GetMsg() });
         }
 
         [Route("toselfastransient")]
         [HttpGet]
-        public string GetToSelfAsTransient()
+        public IHttpActionResult GetToSelfAsTransient()
         {
-            return _toSelfMessageProvider.GetMsg();
+            return Ok(new { msg = _toSelfMessageProvider.GetMsg() });
         }
 
         [Route("toselfassingleton")]
         [HttpGet]
-        public string GetToSelfAsSingleton()
+        public IHttpActionResult GetToSelfAsSingleton()
         {
-            return _toSelfAsSingletonMessageProvider.GetMsg();
+            return Ok(new { msg = _toSelfAsSingletonMessageProvider.GetMsg() });
         }
 
         [Route("perrequest")]
         [HttpGet]
-        public string GetPerRequest()
+        public IHttpActionResult GetPerRequest()
         {
-            return _perRequestMessageProvider.GetMsg();
+            return Ok(new { msg = _perRequestMessageProvider.GetMsg() });
         }
 
         [Route("toselfperrequest")]
         [HttpGet]
-        public string GetToSelfPerRequest()
+        public IHttpActionResult GetToSelfPerRequest()
         {
-            return _toSelfPerRequestMessageProvider.GetMsg();
+            return Ok(new { msg = _toSelfPerRequestMessageProvider.GetMsg() });
         }
     }
 

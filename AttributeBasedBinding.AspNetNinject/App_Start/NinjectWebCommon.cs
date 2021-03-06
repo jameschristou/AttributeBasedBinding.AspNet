@@ -66,6 +66,14 @@ namespace AttributeBasedBinding.AspNetNinject.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.UseAttributeBasedBindings();
+        }
+    }
+
+    public static class NinjectKernalExtensions
+    {
+        public static void UseAttributeBasedBindings(this IKernel kernel)
+        {
             // only scan our assemblies and not 3rd party assemblies or external assemblies
             var assembliesToScan = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(a => a.FullName.StartsWith("AttributeBasedBinding.")).ToArray();
