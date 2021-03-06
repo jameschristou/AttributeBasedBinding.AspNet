@@ -95,6 +95,20 @@ namespace AttributeBasedBinding.AspNetNinject.App_Start
                                 .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindToSelfAsSingletonAttribute)))
                                 .BindToSelf()
                                 .Configure(b => b.InSingletonScope()));
+
+            // implementing interface and request scope
+            kernel.Bind(x => x.From(assembliesToScan)
+                                .SelectAllClasses()
+                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindPerRequestAttribute)))
+                                .BindSingleInterface()
+                                .Configure(b => b.InRequestScope()));
+
+            // self binding and request scope
+            kernel.Bind(x => x.From(assembliesToScan)
+                                .SelectAllClasses()
+                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindToSelfPerRequestAttribute)))
+                                .BindToSelf()
+                                .Configure(b => b.InRequestScope()));
         }
     }
 }

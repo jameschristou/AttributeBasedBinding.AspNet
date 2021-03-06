@@ -9,19 +9,24 @@ namespace AttributeBasedBinding.AspNetNinject.Controllers
         private readonly ISingletonMessageProvider _singletonMessageProvider;
         private readonly ToSelfMessageProvider _toSelfMessageProvider;
         private readonly ToSelfAsSingletonMessageProvider _toSelfAsSingletonMessageProvider;
+        private readonly IPerRequestMessageProvider _perRequestMessageProvider;
+        private readonly ToSelfPerRequestMessageProvider _toSelfPerRequestMessageProvider;
 
         public ExamplesController(ITransientMessageProvider transientMessageProvider, 
                                 ISingletonMessageProvider singletonMessageProvider,
                                 ToSelfMessageProvider toSelfMessageProvider,
-                                ToSelfAsSingletonMessageProvider toSelfAsSingletonMessageProvider)
+                                ToSelfAsSingletonMessageProvider toSelfAsSingletonMessageProvider,
+                                IPerRequestMessageProvider perRequestMessageProvider,
+                                ToSelfPerRequestMessageProvider toSelfPerRequestMessageProvider)
         {
             _transientMessageProvider = transientMessageProvider;
             _singletonMessageProvider = singletonMessageProvider;
             _toSelfMessageProvider = toSelfMessageProvider;
             _toSelfAsSingletonMessageProvider = toSelfAsSingletonMessageProvider;
+            _perRequestMessageProvider = perRequestMessageProvider;
+            _toSelfPerRequestMessageProvider = toSelfPerRequestMessageProvider;
         }
 
-        // GET api/values
         [Route("transient")]
         [HttpGet]
         public string GetTransient()
@@ -29,7 +34,6 @@ namespace AttributeBasedBinding.AspNetNinject.Controllers
             return _transientMessageProvider.GetMsg();
         }
 
-        // GET api/values/5
         [Route("singleton")]
         [HttpGet]
         public string GetSingleton()
@@ -37,18 +41,32 @@ namespace AttributeBasedBinding.AspNetNinject.Controllers
             return _singletonMessageProvider.GetMsg();
         }
 
-        [Route("selfastransient")]
+        [Route("toselfastransient")]
         [HttpGet]
-        public string GetSelfAsTransient()
+        public string GetToSelfAsTransient()
         {
             return _toSelfMessageProvider.GetMsg();
         }
 
-        [Route("selfassingleton")]
+        [Route("toselfassingleton")]
         [HttpGet]
-        public string GetSelfAsSingleton()
+        public string GetToSelfAsSingleton()
         {
             return _toSelfAsSingletonMessageProvider.GetMsg();
+        }
+
+        [Route("perrequest")]
+        [HttpGet]
+        public string GetPerRequest()
+        {
+            return _perRequestMessageProvider.GetMsg();
+        }
+
+        [Route("toselfperrequest")]
+        [HttpGet]
+        public string GetToSelfPerRequest()
+        {
+            return _toSelfPerRequestMessageProvider.GetMsg();
         }
     }
 
@@ -82,6 +100,23 @@ namespace AttributeBasedBinding.AspNetNinject.Controllers
 
     [BindToSelfAsSingleton]
     public class ToSelfAsSingletonMessageProvider : MessageProvider
+    {
+
+    }
+
+    public interface IPerRequestMessageProvider
+    {
+        string GetMsg();
+    }
+
+    [BindPerRequest]
+    public class PerRequestMessageProvider : MessageProvider, IPerRequestMessageProvider
+    {
+
+    }
+
+    [BindToSelfPerRequest]
+    public class ToSelfPerRequestMessageProvider : MessageProvider
     {
 
     }

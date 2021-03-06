@@ -33,6 +33,16 @@ namespace AttributeBasedBinding
     {
     }
 
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public class BindToSelfPerRequestAttribute : Attribute
+    {
+    }
+
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public class BindPerRequestAttribute : Attribute
+    {
+    }
+
     public enum BindingType
     {
         AsTransient,
