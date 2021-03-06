@@ -24,9 +24,6 @@ namespace AttributeBasedBinding.AspNetNinject
 
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
-            // This next commented out line was causing the problem
-            //var jsonFormatter = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
-
             // This next line was the solution
             config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false; // defaults to false, but no harm done
             config.Formatters.JsonFormatter.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
