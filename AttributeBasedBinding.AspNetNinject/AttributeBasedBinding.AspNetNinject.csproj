@@ -272,6 +272,10 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AttributeBasedBinding.NinjectIoc\AttributeBasedBinding.NinjectIoc.csproj">
+      <Project>{e95a8a0e-5c80-46e6-abff-dccd21ae5577}</Project>
+      <Name>AttributeBasedBinding.NinjectIoc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AttributeBasedBinding\AttributeBasedBinding.csproj">
       <Project>{050c89f4-6601-477b-bcd1-1d1ee40603f6}</Project>
       <Name>AttributeBasedBinding</Name>

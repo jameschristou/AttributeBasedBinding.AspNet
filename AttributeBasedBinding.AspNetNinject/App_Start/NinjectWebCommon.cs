@@ -13,8 +13,7 @@ namespace AttributeBasedBinding.AspNetNinject.App_Start
     using Ninject.Web.Common.WebHost;
     using System.Web.Http;
     using Ninject.Web.WebApi;
-    using System.Linq;
-    using Ninject.Extensions.Conventions;
+    using AttributeBasedBinding.NinjectIoc;
 
     public static class NinjectWebCommon 
     {
@@ -67,56 +66,6 @@ namespace AttributeBasedBinding.AspNetNinject.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.UseAttributeBasedBindings();
-        }
-    }
-
-    public static class NinjectKernalExtensions
-    {
-        public static void UseAttributeBasedBindings(this IKernel kernel)
-        {
-            // only scan our assemblies and not 3rd party assemblies or external assemblies
-            var assembliesToScan = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a => a.FullName.StartsWith("AttributeBasedBinding.")).ToArray();
-
-            // implementing interface and transient scope
-            kernel.Bind(x => x.From(assembliesToScan)
-                                .SelectAllClasses()
-                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindAttribute)))
-                                .BindSingleInterface());
-
-            // self binding transient scope
-            kernel.Bind(x => x.From(assembliesToScan)
-                                .SelectAllClasses()
-                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindToSelfAttribute)))
-                                .BindToSelf());
-
-            // implementing interface and singleton scope
-            kernel.Bind(x => x.From(assembliesToScan)
-                                .SelectAllClasses()
-                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindAsSingletonAttribute)))
-                                .BindSingleInterface()
-                                .Configure(b => b.InSingletonScope()));
-
-            // self binding and singleton scope
-            kernel.Bind(x => x.From(assembliesToScan)
-                                .SelectAllClasses()
-                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindToSelfAsSingletonAttribute)))
-                                .BindToSelf()
-                                .Configure(b => b.InSingletonScope()));
-
-            // implementing interface and request scope
-            kernel.Bind(x => x.From(assembliesToScan)
-                                .SelectAllClasses()
-                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindPerRequestAttribute)))
-                                .BindSingleInterface()
-                                .Configure(b => b.InRequestScope()));
-
-            // self binding and request scope
-            kernel.Bind(x => x.From(assembliesToScan)
-                                .SelectAllClasses()
-                                .Where(t => t.CustomAttributes.Any(a => a.AttributeType == typeof(BindToSelfPerRequestAttribute)))
-                                .BindToSelf()
-                                .Configure(b => b.InRequestScope()));
         }
     }
 }

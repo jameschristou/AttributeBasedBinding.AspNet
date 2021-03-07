@@ -7,7 +7,7 @@ what the binding is when examining the class definition.
 There are a number of common binding types supported.
 
 ### Transient Binding (Default)
-This binding type causes a new instance of the service to be created and is the default binding type.
+This binding type creates a new instance of the service that implements the required interface and is the default binding type.
 ```
 [Bind]
 public class MessageProvider : IMessageProvider
@@ -16,9 +16,45 @@ public class MessageProvider : IMessageProvider
 ```
 
 ### Transient Binding To Self
-This binding type causes a new instance of the service to be created and is the default binding type.
+This binding type causes a new instance of the service to be created.
 ```
 [BindToSelf]
+public class MessageProvider
+{
+}
+```
+
+### Singleton Binding
+This binding type causes a single instance of the service to be created for the lifetime of the application. This instance is then shared by all consumers of the interface.
+```
+[BindAsSingleton]
+public class MessageProvider : IMessageProvider
+{
+}
+```
+
+### Singleton Binding To Self
+This binding type causes a single instance of the service to be created for the lifetime of the application. This instance is then shared by all consumers.
+```
+[BindToSelfAsSingleton]
+public class MessageProvider
+{
+}
+```
+
+### Per Request Binding
+This binding type causes a new instance of the service to be created for each request scope (in ASP.NET). This instance is then shared by all consumers of the interface within the request scope.
+```
+[BindPerRequest]
+public class MessageProvider : IMessageProvider
+{
+}
+```
+
+### Per Request Binding To Self
+This binding type causes a new instance of the service to be created for each request scope (in ASP.NET). This instance is then shared by all consumers within the request scope.
+```
+[BindToSelfPerRequest]
 public class MessageProvider
 {
 }

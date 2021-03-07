@@ -7,6 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AttributeBasedBinding", "At
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttributeBasedBinding.AspNetNinject", "AttributeBasedBinding.AspNetNinject\AttributeBasedBinding.AspNetNinject.csproj", "{E577ECAE-F958-4E37-A39D-1044E8697B0D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{8E09D2B0-9335-40AC-BBD4-1633151364DA}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttributeBasedBinding.NinjectIoc", "AttributeBasedBinding.NinjectIoc\AttributeBasedBinding.NinjectIoc.csproj", "{E95A8A0E-5C80-46E6-ABFF-DCCD21AE5577}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +29,10 @@ Global
 		{E577ECAE-F958-4E37-A39D-1044E8697B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E577ECAE-F958-4E37-A39D-1044E8697B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E577ECAE-F958-4E37-A39D-1044E8697B0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E95A8A0E-5C80-46E6-ABFF-DCCD21AE5577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E95A8A0E-5C80-46E6-ABFF-DCCD21AE5577}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E95A8A0E-5C80-46E6-ABFF-DCCD21AE5577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E95A8A0E-5C80-46E6-ABFF-DCCD21AE5577}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
