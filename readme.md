@@ -9,7 +9,7 @@ There are a number of common binding types supported.
 ### Supported Binding Types
 #### Transient Binding (Default)
 This binding type creates a new instance of the service for every consumer of the service. It is the default binding type.
-```
+```C#
 [Bind]
 public class MessageProvider : IMessageProvider
 {
@@ -18,7 +18,7 @@ public class MessageProvider : IMessageProvider
 
 #### Transient Binding To Self
 This binding type causes a new instance of the service to be created for every consumer of the service.
-```
+```C#
 [BindToSelf]
 public class MessageProvider
 {
@@ -27,7 +27,7 @@ public class MessageProvider
 
 #### Singleton Binding
 This binding type causes a single instance of the service to be created for the lifetime of the application. This instance is then shared by all consumers of the service.
-```
+```C#
 [BindAsSingleton]
 public class MessageProvider : IMessageProvider
 {
@@ -36,7 +36,7 @@ public class MessageProvider : IMessageProvider
 
 #### Singleton Binding To Self
 This binding type causes a single instance of the service to be created for the lifetime of the application. This instance is then shared by all consumers of the service.
-```
+```C#
 [BindToSelfAsSingleton]
 public class MessageProvider
 {
@@ -45,7 +45,7 @@ public class MessageProvider
 
 #### Per Request Binding
 This binding type causes a new instance of the service to be created for each request scope (in ASP.NET). This instance is then shared by all consumers of the service within the request scope.
-```
+```C#
 [BindPerRequest]
 public class MessageProvider : IMessageProvider
 {
@@ -54,7 +54,7 @@ public class MessageProvider : IMessageProvider
 
 #### Per Request Binding To Self
 This binding type causes a new instance of the service to be created for each request scope (in ASP.NET). This instance is then shared by all consumers of the service within the request scope.
-```
+```C#
 [BindToSelfPerRequest]
 public class MessageProvider
 {
